@@ -21,7 +21,6 @@ The system consists of three main components:
 - **Category Browsing**: Browse businesses by service categories (Home, Pet Care, Spa, etc.)
 - **Recently Viewed**: Quick access to previously browsed businesses
 - **Favorites System**: Save preferred businesses for easy booking
-
 <img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-13 at 20 14 45" src="https://github.com/user-attachments/assets/1c07a531-7fdb-4c2f-a860-36088ebfa208" />
 <img width="250" height="520" alt="image" src="https://github.com/user-attachments/assets/425f114c-944b-445c-83e9-ffc8a8f2da10" />
 <img width="250" height="520" alt="image" src="https://github.com/user-attachments/assets/f1638b02-f41c-4970-ab8c-a82956734b8d" />
@@ -32,12 +31,20 @@ The system consists of three main components:
 - **Conflict Prevention**: Advanced race condition protection prevents double bookings
 - **Smart Time Refresh**: Automatically updates available times if conflicts occur
 - **Booking Confirmation**: Instant confirmation with appointment details
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-13 at 20 16 10" src="https://github.com/user-attachments/assets/5a2a0135-e622-4f67-986a-97af6267d103" />
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-13 at 20 16 37" src="https://github.com/user-attachments/assets/7b30bb11-c093-4fb5-a592-306166b7bb39" />
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-13 at 20 16 47" src="https://github.com/user-attachments/assets/eea86b3f-9dde-4afd-a9c2-3cc4721ad7b1" />
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-13 at 20 16 53" src="https://github.com/user-attachments/assets/9ecd1409-c963-41e6-880a-e7fdf426c8f7" />
 
 ### 👤 **Profile & Account Management**
 - **Phone-based Authentication**: Secure OTP verification system
 - **Profile Management**: Update personal information and preferences
 - **Appointment History**: View all past, current, and upcoming appointments
 - **Appointment Actions**: Cancel, reschedule, or modify existing bookings
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-13 at 20 17 53" src="https://github.com/user-attachments/assets/1e0a41f9-a006-4f44-9da3-80b55a6f3c57" />
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-13 at 20 18 12" src="https://github.com/user-attachments/assets/15be8e5b-ada1-4677-a3e1-2e2148ebad73" />
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-13 at 20 18 30" src="https://github.com/user-attachments/assets/a647cd40-2b45-40cc-9ff4-5023c609adb1" />
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-13 at 20 18 38" src="https://github.com/user-attachments/assets/8017ed81-c575-4b0c-94b4-ef73cc61c02e" />
 
 ### 🎨 **User Experience**
 - **Dark/Light Mode**: Toggle between themes for comfortable viewing
@@ -50,36 +57,39 @@ The system consists of three main components:
 - **Business Overview**: Key metrics and performance indicators
 - **Today's Schedule**: Quick view of today's appointments
 
+  
+
 ### 📋 **Appointment Management**
 - **Comprehensive Calendar**: Month, week, and day views of all appointments
 - **Status Management**: Update appointments as completed, cancelled, or rescheduled
 - **Customer Information**: Access customer details and contact information
-- **Bulk Operations**: Manage multiple appointments efficiently
 - **Search & Filter**: Find specific appointments by date, customer, or service
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro Max - 2025-09-13 at 21 26 25" src="https://github.com/user-attachments/assets/caba47c7-f004-432d-a571-2a9b7a243d23" />
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro Max - 2025-09-13 at 21 26 36" src="https://github.com/user-attachments/assets/4f7d2a67-86e3-4c2d-bdb8-d20c13aa1905" />
 
 ### 🛠️ **Service Management**
 - **Service Creation**: Add new services with pricing, duration, and descriptions
 - **Service Editing**: Update service details, pricing, and availability
-- **Service Analytics**: Track which services are most popular
-- **Image Management**: Upload and manage service photos
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro Max - 2025-09-13 at 21 27 17" src="https://github.com/user-attachments/assets/8e97196f-2b23-4973-b385-4a3de64ab140" />
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro Max - 2025-09-13 at 21 27 25" src="https://github.com/user-attachments/assets/351e59ec-ac25-4493-a5f7-41bdbd4b9246" />
 
 ### ⏰ **Schedule Management**
 - **Working Hours**: Set daily operating hours for each day of the week
 - **Break Management**: Configure lunch breaks and short breaks
 - **Temporary Closures**: Set holiday closures and temporary shutdowns
 - **Schedule Templates**: Reuse common scheduling patterns
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro Max - 2025-09-13 at 21 28 00" src="https://github.com/user-attachments/assets/cffc4ba3-10df-4ab3-9eb3-410b8446ab80" />
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro Max - 2025-09-13 at 21 28 37" src="https://github.com/user-attachments/assets/9dd0ad5d-d04d-40dd-a669-9755ee9b2e56" />
 
-### 👥 **Customer Management**
-- **Customer Database**: Maintain detailed customer profiles
-- **Booking History**: View each customer's appointment history
-- **Customer Search**: Find customers by name, phone, or email
-- **Customer Analytics**: Track customer retention and preferences
 
 ### 🏢 **Business Profile**
 - **Business Information**: Manage name, description, contact details
 - **Location Settings**: Set business address and service area
 - **Gallery Management**: Upload and organize business photos
 - **Operating Information**: Set business hours, services, and policies
+
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro Max - 2025-09-13 at 21 31 05" src="https://github.com/user-attachments/assets/d8ae585c-7df9-4b65-9ffa-1103ca9c44a0" />
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro Max - 2025-09-13 at 21 31 21" src="https://github.com/user-attachments/assets/a47e1a6e-2c57-49bd-a92f-bc77035e553f" />
 
 ## Backend Server Features
 
