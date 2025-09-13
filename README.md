@@ -23,9 +23,9 @@ The system consists of three main components:
 - **Favorites System**: Save preferred businesses for easy booking
 
 
-<img width="300" height="520" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-13 at 20 12 45" src="https://github.com/user-attachments/assets/bcf10fae-718e-4787-9e06-b5a525850e32" />
-<img width="300" height="520" alt="image" src="https://github.com/user-attachments/assets/425f114c-944b-445c-83e9-ffc8a8f2da10" />
-<img width="390" height="810" alt="image" src="https://github.com/user-attachments/assets/f1638b02-f41c-4970-ab8c-a82956734b8d" />
+<img width="250" height="520" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-13 at 20 12 45" src="https://github.com/user-attachments/assets/bcf10fae-718e-4787-9e06-b5a525850e32" />
+<img width="250" height="520" alt="image" src="https://github.com/user-attachments/assets/425f114c-944b-445c-83e9-ffc8a8f2da10" />
+<img width="250" height="520" alt="image" src="https://github.com/user-attachments/assets/f1638b02-f41c-4970-ab8c-a82956734b8d" />
 
 
 
