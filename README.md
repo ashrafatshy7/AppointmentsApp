@@ -22,9 +22,9 @@ The system consists of three main components:
 - **Recently Viewed**: Quick access to previously browsed businesses
 - **Favorites System**: Save preferred businesses for easy booking
 
-<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-13 at 19 08 46" src="https://github.com/user-attachments/assets/f3e609e0-d6f5-4862-b19a-0ab4054395a2" />
+<img width="390" height="810" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-13 at 19 08 46" src="https://github.com/user-attachments/assets/f3e609e0-d6f5-4862-b19a-0ab4054395a2" />
 <img width="390" height="810" alt="image" src="https://github.com/user-attachments/assets/425f114c-944b-445c-83e9-ffc8a8f2da10" />
-<img width="400" height="806" alt="image" src="https://github.com/user-attachments/assets/f1638b02-f41c-4970-ab8c-a82956734b8d" />
+<img width="390" height="810" alt="image" src="https://github.com/user-attachments/assets/f1638b02-f41c-4970-ab8c-a82956734b8d" />
 
 
 
