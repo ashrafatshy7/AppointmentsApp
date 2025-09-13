@@ -56,8 +56,8 @@ The system consists of three main components:
 ### 📊 **Dashboard**
 - **Business Overview**: Key metrics and performance indicators
 - **Today's Schedule**: Quick view of today's appointments
+<img width="1320" height="2868" alt="Simulator Screenshot - iPhone 16 Pro Max - 2025-09-14 at 00 07 06" src="https://github.com/user-attachments/assets/1f2de34d-0dbe-4b05-a75b-d4934e087fbe" />
 
-  
 
 ### 📋 **Appointment Management**
 - **Comprehensive Calendar**: Month, week, and day views of all appointments
