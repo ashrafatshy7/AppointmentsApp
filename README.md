@@ -18,10 +18,15 @@ The system consists of three main components:
 
 ### 🔍 **Business Discovery**
 - **Location-based Search**: Find businesses near your current location
-- **Category Browsing**: Browse businesses by service categories (Pet Care, Beauty, Healthcare, etc.)
-- **Advanced Filtering**: Filter by distance, ratings, availability, and price range
+- **Category Browsing**: Browse businesses by service categories (Home, Pet Care, Spa, etc.)
 - **Recently Viewed**: Quick access to previously browsed businesses
 - **Favorites System**: Save preferred businesses for easy booking
+
+<img width="1206" height="2622" alt="Simulator Screenshot - iPhone 16 Pro - 2025-09-13 at 19 08 46" src="https://github.com/user-attachments/assets/f3e609e0-d6f5-4862-b19a-0ab4054395a2" />
+<img width="390" height="810" alt="image" src="https://github.com/user-attachments/assets/425f114c-944b-445c-83e9-ffc8a8f2da10" />
+<img width="400" height="806" alt="image" src="https://github.com/user-attachments/assets/f1638b02-f41c-4970-ab8c-a82956734b8d" />
+
+
 
 ### 📅 **Appointment Booking**
 - **Real-time Availability**: View live available time slots for any date
@@ -38,17 +43,14 @@ The system consists of three main components:
 
 ### 🎨 **User Experience**
 - **Dark/Light Mode**: Toggle between themes for comfortable viewing
-- **Multi-language Support**: Interface available in multiple languages
 - **Intuitive Navigation**: Smooth tab and stack navigation with proper animations
 - **City Selection**: Choose and filter businesses by city
 
 ## BusinessSide Features
 
-### 📊 **Dashboard & Analytics**
+### 📊 **Dashboard**
 - **Business Overview**: Key metrics and performance indicators
 - **Today's Schedule**: Quick view of today's appointments
-- **Statistics Tracking**: Monitor booking trends and business growth
-- **Revenue Insights**: Track earnings and popular services
 
 ### 📋 **Appointment Management**
 - **Comprehensive Calendar**: Month, week, and day views of all appointments
