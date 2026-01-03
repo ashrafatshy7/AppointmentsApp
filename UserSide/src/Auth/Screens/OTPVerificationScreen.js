@@ -7,12 +7,12 @@ import {
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-  SafeAreaView,
   Alert,
   ActivityIndicator,
   Image,
   TouchableOpacity
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useNavigation, useRoute, CommonActions } from '@react-navigation/native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { ScaledSheet } from 'react-native-size-matters';

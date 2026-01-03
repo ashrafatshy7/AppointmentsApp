@@ -1,5 +1,5 @@
 // API Configuration
-export const API_BASE_URL = 'http://10.0.0.109:3000/api';
+export const API_BASE_URL = 'http://10.0.0.6:3000/api';
 
 // App Configuration
 export const APP_CONFIG = {

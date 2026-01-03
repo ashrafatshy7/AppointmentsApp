@@ -9,9 +9,9 @@ import {
   Image,
   StyleSheet,
   StatusBar,
-  SafeAreaView,
   Keyboard
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { ScaledSheet } from 'react-native-size-matters';
 // import { businessesData } from '../Service/HomePageData'; // Removed - file deleted

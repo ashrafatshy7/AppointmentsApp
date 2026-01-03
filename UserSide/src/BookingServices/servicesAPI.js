@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseURL = "http://10.0.0.109:3000/service/";
+const baseURL = "http://10.0.0.6:3000/service/";
 
 export const getBusinessServices = async (serialNumber) => {
   try {

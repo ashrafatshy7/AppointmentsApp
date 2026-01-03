@@ -1,5 +1,5 @@
 // src/Auth/Services/ApiService.js
-const API_BASE_URL = "http://10.0.0.109:3000/api";
+const API_BASE_URL = "http://10.0.0.6:3000/api";
 
 export const checkUserExists = async (phone) => {
   try {

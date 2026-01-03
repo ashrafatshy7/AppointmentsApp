@@ -43,7 +43,7 @@ const BusinessRegisterScreen = ({ navigation, route }) => {
   const fetchCategories = async () => {
     try {
       setIsLoadingCategories(true);
-      const response = await fetch('http://10.0.0.109:3000/api/categories');
+      const response = await fetch('http://10.0.0.6:3000/api/categories');
       if (response.ok) {
         const data = await response.json();
         setBusinessCategories(data.data);

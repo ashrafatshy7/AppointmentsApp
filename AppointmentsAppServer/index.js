@@ -4,6 +4,7 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const helmet = require("helmet");
+const os = require("os");
 // const rateLimit = require("express-rate-limit"); // Disabled for development
 const fs = require("fs");
 
@@ -27,7 +28,18 @@ mongoose
   });
 
 // Security middleware
-app.use(helmet());
+// app.use(
+//   helmet({
+//     contentSecurityPolicy: {
+//       directives: {
+//         defaultSrc: ["'self'"],
+//         scriptSrc: ["'self'", "'unsafe-inline'", "cdn.jsdelivr.net"],
+//         styleSrc: ["'self'", "'unsafe-inline'", "cdn.jsdelivr.net"],
+//         imgSrc: ["'self'", "data:"],
+//       },
+//     },
+//   })
+// );
 
 // Logging middleware
 app.use(morgan("dev"));
@@ -45,6 +57,31 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 // Static files - serve businesses folder
 app.use("/businesses", express.static("public/businesses"));
 app.use("/users", express.static("public/users"));
+
+// Swagger/OpenAPI setup
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
+
+const options = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'Appointments App API',
+      version: '1.0.0',
+      description: 'API documentation for the Appointments App',
+    },
+    security: [{
+      bearerAuth: [],
+    }],
+  },
+  // Path to the files containing your endpoints
+  apis: ['./routes/*.js', './swaggerSchemas.js'], 
+};
+
+const openapiSpecification = swaggerJsdoc(options);
+
+// This creates the visual interface at /api-docs
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 
 // Routes
 const businessRoutes = require("./routes/businesses");
@@ -86,6 +123,21 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
+const getIpAddress = () => {
+  const interfaces = os.networkInterfaces();
+  for (const interfaceName in interfaces) {
+    const iface = interfaces[interfaceName];
+    for (let i = 0; i < iface.length; i++) {
+      const alias = iface[i];
+      if (alias.family === 'IPv4' && alias.address !== '127.0.0.1' && !alias.internal) {
+        return alias.address;
+      }
+    }
+  }
+  return 'localhost'; // Fallback if no suitable IP is found
+};
+
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on http://10.0.0.109:${PORT}`);
+  const ipAddress = getIpAddress();
+  console.log(`Server running on http://${ipAddress}:${PORT}`);
 });

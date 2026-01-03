@@ -2,9 +2,24 @@ const express = require("express");
 const router = express.Router();
 const Business = require("../models/business");
 
-// Create a new business
-// POST /api/businesses/signup
-// Creates a new business profile
+/**
+ * @openapi
+ * /api/businesses/signup:
+ *   post:
+ *     summary: Create a new business
+ *     description: Creates a new business profile.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Business'
+ *     responses:
+ *       201:
+ *         description: Business created successfully.
+ *       400:
+ *         description: Invalid request body.
+ */
 router.post("/signup", async (req, res) => {
   try {
     const business = new Business(req.body);
@@ -15,9 +30,38 @@ router.post("/signup", async (req, res) => {
   }
 });
 
-// Add services to an existing business
-// POST /api/businesses/:id/addBusiness
-// Updates business details and adds new services
+/**
+ * @openapi
+ * /api/businesses/{id}/addBusiness:
+ *   post:
+ *     summary: Add services to an existing business
+ *     description: Updates business details and adds new services to an existing business.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the business to update.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               services:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/Service'
+ *     responses:
+ *       200:
+ *         description: Business updated successfully.
+ *       400:
+ *         description: Invalid request body.
+ *       404:
+ *         description: Business not found.
+ */
 router.post("/:id/addBusiness", async (req, res) => {
   try {
     const { id } = req.params; // Get business ID from URL
@@ -58,9 +102,24 @@ router.post("/:id/addBusiness", async (req, res) => {
   }
 });
 
-// Get all businesses
-// GET /api/businesses
-// Returns all businesses
+/**
+ * @openapi
+ * /api/businesses:
+ *   get:
+ *     summary: Get all businesses
+ *     description: Retrieves a list of all businesses.
+ *     responses:
+ *       200:
+ *         description: A list of businesses.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Business'
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/", async (req, res) => {
   try {
     const businesses = await Business.find();
@@ -70,9 +129,31 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Get businesses by category with pagination
-// GET /api/businesses/category/:category?page=1
-// Returns paginated list of businesses in a category (10 per page)
+/**
+ * @openapi
+ * /api/businesses/category/{category}:
+ *   get:
+ *     summary: Get businesses by category with pagination
+ *     description: Retrieves a paginated list of businesses within a specific category.
+ *     parameters:
+ *       - in: path
+ *         name: category
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The category to filter by.
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           default: 1
+ *         description: The page number for pagination.
+ *     responses:
+ *       200:
+ *         description: A paginated list of businesses.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/category/:category", async (req, res) => {
   try {
     const category = req.params.category;
@@ -90,9 +171,27 @@ router.get("/category/:category", async (req, res) => {
   }
 });
 
-// Get businesses by city
-// GET /api/businesses/city/:city
-// Returns businesses in a specific city with minimal data
+/**
+ * @openapi
+ * /api/businesses/city/{city}:
+ *   get:
+ *     summary: Get businesses by city
+ *     description: Retrieves businesses located in a specific city, returning minimal data and working hours for the current day.
+ *     parameters:
+ *       - in: path
+ *         name: city
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The city to search for businesses in.
+ *     responses:
+ *       200:
+ *         description: A list of businesses in the specified city.
+ *       400:
+ *         description: City parameter is required.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/city/:city", async (req, res) => {
       try {
       const { city } = req.params;
@@ -118,7 +217,7 @@ router.get("/city/:city", async (req, res) => {
       return {
         id: business._id,
         name: business.name,
-        profileImage: business.profileImage ? `http://10.0.0.109:3000${business.profileImage}` : null,
+        profileImage: business.profileImage ? `http://10.0.0.6:3000${business.profileImage}` : null,
         category: business.category,
         city: business.address?.city,
         workingHours: todayHours && todayHours.open && todayHours.close ? {
@@ -143,7 +242,29 @@ router.get("/city/:city", async (req, res) => {
   }
 });
 
-// Get business details by ID (excluding working hours)
+/**
+ * @openapi
+ * /api/businesses/details/{id}:
+ *   get:
+ *     summary: Get business details by ID (excluding working hours)
+ *     description: Retrieves detailed information for a specific business, excluding the full working hours schedule.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the business.
+ *     responses:
+ *       200:
+ *         description: Detailed business information.
+ *       400:
+ *         description: Business ID parameter is required.
+ *       404:
+ *         description: Business not found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/details/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -163,8 +284,8 @@ router.get("/details/:id", async (req, res) => {
     const transformedBusiness = {
       id: business._id,
       name: business.name,
-      profileImage: business.profileImage ? `http://10.0.0.109:3000${business.profileImage}` : null,
-      coverImage: business.coverImage ? `http://10.0.0.109:3000${business.coverImage}` : null,
+      profileImage: business.profileImage ? `http://10.0.0.6:3000${business.profileImage}` : null,
+      coverImage: business.coverImage ? `http://10.0.0.6:3000${business.coverImage}` : null,
       category: business.category,
       ownerName: business.ownerName,
       ownerPhone: business.ownerPhone,
@@ -207,7 +328,29 @@ router.get("/details/:id", async (req, res) => {
   }
 });
 
-// Get business working hours by ID
+/**
+ * @openapi
+ * /api/businesses/hours/{id}:
+ *   get:
+ *     summary: Get business working hours by ID
+ *     description: Retrieves the working hours schedule for a specific business.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the business.
+ *     responses:
+ *       200:
+ *         description: The working hours of the business.
+ *       400:
+ *         description: Business ID parameter is required.
+ *       404:
+ *         description: Business not found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/hours/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -237,9 +380,39 @@ router.get("/hours/:id", async (req, res) => {
   }
 });
 
-// Get nearby businesses based on location or town
-// GET /api/businesses/nearby?lat=X&lng=Y&category=Z&town=T
-// Uses geospatial query if coordinates provided, otherwise filters by town
+/**
+ * @openapi
+ * /api/businesses/nearby:
+ *   get:
+ *     summary: Get nearby businesses
+ *     description: Finds nearby businesses based on geographical coordinates or filters by town if coordinates are not provided.
+ *     parameters:
+ *       - in: query
+ *         name: lat
+ *         schema:
+ *           type: number
+ *         description: Latitude for the search.
+ *       - in: query
+ *         name: lng
+ *         schema:
+ *           type: number
+ *         description: Longitude for the search.
+ *       - in: query
+ *         name: category
+ *         schema:
+ *           type: string
+ *         description: Category to filter by.
+ *       - in: query
+ *         name: town
+ *         schema:
+ *           type: string
+ *         description: Town to filter by if location is not available.
+ *     responses:
+ *       200:
+ *         description: A list of nearby businesses.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/nearby", async (req, res) => {
   const { lat, lng, category, town } = req.query;
   const hasLocation = lat && lng;
@@ -273,9 +446,31 @@ router.get("/nearby", async (req, res) => {
   }
 });
 
-// Get a single business by ID
-// GET /api/businesses/:id
-// Returns business details
+/**
+ * @openapi
+ * /api/businesses/{id}:
+ *   get:
+ *     summary: Get a single business by ID
+ *     description: Retrieves a single business by its unique ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the business.
+ *     responses:
+ *       200:
+ *         description: The requested business.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Business'
+ *       404:
+ *         description: Business not found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/:id", async (req, res) => {
   try {
     const business = await Business.findById(req.params.id);
@@ -286,9 +481,33 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Update a business
-// PUT /api/businesses/:id
-// Updates business information
+/**
+ * @openapi
+ * /api/businesses/{id}:
+ *   put:
+ *     summary: Update a business
+ *     description: Updates the information for a specific business.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the business to update.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Business'
+ *     responses:
+ *       200:
+ *         description: The updated business.
+ *       400:
+ *         description: Invalid request body.
+ *       404:
+ *         description: Business not found.
+ */
 router.put("/:id", async (req, res) => {
   try {
     const updated = await Business.findByIdAndUpdate(req.params.id, req.body, {
@@ -301,9 +520,27 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete a business
-// DELETE /api/businesses/:id
-// Removes business from database
+/**
+ * @openapi
+ * /api/businesses/{id}:
+ *   delete:
+ *     summary: Delete a business
+ *     description: Permanently removes a business from the database.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the business to delete.
+ *     responses:
+ *       200:
+ *         description: Business deleted successfully.
+ *       404:
+ *         description: Business not found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.delete("/:id", async (req, res) => {
   try {
     const deleted = await Business.findByIdAndDelete(req.params.id);
@@ -314,7 +551,36 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-// link businesses with users
+/**
+ * @openapi
+ * /api/businesses/link-user:
+ *   post:
+ *     summary: Link a user to a business
+ *     description: Associates a user account with a business by adding the business ID to the user's profile.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - userId
+ *               - businessId
+ *             properties:
+ *               userId:
+ *                 type: string
+ *                 description: The ID of the user.
+ *               businessId:
+ *                 type: string
+ *                 description: The ID of the business.
+ *     responses:
+ *       200:
+ *         description: User linked successfully.
+ *       400:
+ *         description: Invalid request body.
+ *       404:
+ *         description: User not found.
+ */
 router.post("/link-user", async (req, res) => {
   try {
     const { userId, businessId } = req.body;

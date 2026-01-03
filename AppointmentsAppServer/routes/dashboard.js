@@ -4,7 +4,40 @@ const router = express.Router();
 const Appointment = require("../models/appointment");
 const dayjs = require("dayjs");
 
-// Get business dashboard counts only
+/**
+ * @openapi
+ * /api/dashboard/{businessId}:
+ *   get:
+ *     summary: Get business dashboard counts
+ *     description: Retrieves key appointment counts for a business's dashboard, such as today's upcoming and completed appointments, and this month's totals.
+ *     parameters:
+ *       - in: path
+ *         name: businessId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the business.
+ *     responses:
+ *       200:
+ *         description: Dashboard data retrieved successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 todayUpcomingCount:
+ *                   type: integer
+ *                 todayCompletedCount:
+ *                   type: integer
+ *                 remainingThisMonthCount:
+ *                   type: integer
+ *                 totalThisMonthCount:
+ *                   type: integer
+ *                 completedThisMonthCount:
+ *                   type: integer
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/:businessId", async (req, res) => {
   try {
     const { businessId } = req.params;

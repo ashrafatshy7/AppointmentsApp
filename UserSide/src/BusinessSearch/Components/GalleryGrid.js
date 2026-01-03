@@ -11,7 +11,7 @@ const GalleryGrid = ({ gallery }) => {
   
   
   // Base URL for the server
-  const SERVER_BASE_URL = 'http://10.0.0.109:3000';
+  const SERVER_BASE_URL = 'http://10.0.0.6:3000';
   
   // Helper function to construct full image URL
   const getImageUrl = (path) => {

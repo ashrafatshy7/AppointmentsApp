@@ -7,9 +7,66 @@ const Business = require("../models/business");
 const { TransactionHandler, BookingError } = require("../utils/transactionHandler");
 const BookingValidator = require("../utils/bookingValidator"); 
 
-/// Create a new appointment with FULL RACE CONDITION PROTECTION
-// POST /api/appointments/book
-// Uses atomic transactions and comprehensive conflict detection
+/**
+ * @openapi
+ * /api/appointments/book:
+ *   post:
+ *     summary: Create a new appointment with atomic transaction
+ *     description: Creates a new appointment with full race condition protection using atomic transactions. It validates all inputs, resolves the user by ID or phone number, and ensures the selected time slot is available.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - business
+ *               - user
+ *               - service
+ *               - date
+ *               - time
+ *               - durationMinutes
+ *             properties:
+ *               business:
+ *                 type: string
+ *                 description: The ID of the business.
+ *               user:
+ *                 type: string
+ *                 description: The ID or phone number of the user.
+ *               service:
+ *                 type: string
+ *                 description: The ID of the service.
+ *               date:
+ *                 type: string
+ *                 format: date
+ *                 description: The date of the appointment (YYYY-MM-DD).
+ *               time:
+ *                 type: string
+ *                 description: The time of the appointment (HH:MM).
+ *               durationMinutes:
+ *                 type: integer
+ *                 description: The duration of the appointment in minutes.
+ *     responses:
+ *       201:
+ *         description: Appointment created successfully.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 appointment:
+ *                   $ref: '#/components/schemas/Appointment'
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Validation failed or invalid ID.
+ *       409:
+ *         description: Time slot conflict or race condition.
+ *       500:
+ *         description: Internal server error.
+ */
 router.post("/book", async (req, res) => {
   try {
     console.log('🚀 === ATOMIC APPOINTMENT CREATION REQUEST ===');
@@ -209,9 +266,24 @@ function handleBookingError(res, result) {
   }
 }
 
-// Get all appointments in the system
-// GET /api/appointments
-// Returns all appointments with populated business, user, and service data
+/**
+ * @openapi
+ * /api/appointments:
+ *   get:
+ *     summary: Get all appointments
+ *     description: Retrieves a list of all appointments in the system, with populated business, user, and service data, sorted by date and time.
+ *     responses:
+ *       200:
+ *         description: A list of appointments.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Appointment'
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/", async (req, res) => {
   try {
     const appointments = await Appointment.find().populate(
@@ -223,9 +295,37 @@ router.get("/", async (req, res) => {
   }
 });
 
-// Get appointments for a specific business
-// GET /api/appointments/business/:businessId?date=YYYY-MM-DD
-// Optional date query parameter to filter by date
+/**
+ * @openapi
+ * /api/appointments/business/{businessId}:
+ *   get:
+ *     summary: Get appointments for a specific business
+ *     description: Retrieves appointments for a given business. Can be filtered by a specific date.
+ *     parameters:
+ *       - in: path
+ *         name: businessId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the business.
+ *       - in: query
+ *         name: date
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: Optional. Filter appointments by this date (YYYY-MM-DD).
+ *     responses:
+ *       200:
+ *         description: A list of appointments for the business.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Appointment'
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/business/:businessId", async (req, res) => {
   try {
     const { businessId } = req.params;
@@ -254,11 +354,31 @@ router.get("/business/:businessId", async (req, res) => {
   }
 });
 
-// Removed conflicting route - using phone-based endpoint instead
-
-// Get a single appointment by ID
-// GET /api/appointments/:id
-// Returns appointment with populated references
+/**
+ * @openapi
+ * /api/appointments/{id}:
+ *   get:
+ *     summary: Get a single appointment by ID
+ *     description: Retrieves a single appointment by its unique ID, with populated business, user, and service references.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the appointment.
+ *     responses:
+ *       200:
+ *         description: The requested appointment.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Appointment'
+ *       404:
+ *         description: Appointment not found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/:id", async (req, res) => {
   try {
     const appointment = await Appointment.findById(req.params.id).populate(
@@ -271,8 +391,46 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Update appointment status
-// PATCH /api/appointments/:id/status
+/**
+ * @openapi
+ * /api/appointments/{id}/status:
+ *   patch:
+ *     summary: Update appointment status
+ *     description: Updates the status of an appointment (e.g., 'booked', 'completed', 'canceled').
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the appointment to update.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - status
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 enum: [booked, completed, canceled]
+ *                 description: The new status for the appointment.
+ *     responses:
+ *       200:
+ *         description: The updated appointment.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Appointment'
+ *       400:
+ *         description: Invalid status or invalid status transition.
+ *       404:
+ *         description: Appointment not found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.patch("/:id/status", async (req, res) => {
   try {
     const { status } = req.body;
@@ -358,8 +516,31 @@ function validateStatusTransition(currentStatus, newStatus) {
   };
 }
 
-// Get appointment status history/details
-// GET /api/appointments/:id/status-info
+/**
+ * @openapi
+ * /api/appointments/{id}/status-info:
+ *   get:
+ *     summary: Get appointment status history/details
+ *     description: Retrieves detailed status information and history for a single appointment.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the appointment.
+ *     responses:
+ *       200:
+ *         description: Detailed status information for the appointment.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *       404:
+ *         description: Appointment not found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/:id/status-info", async (req, res) => {
   try {
     const appointment = await Appointment.findById(req.params.id)
@@ -400,8 +581,52 @@ router.get("/:id/status-info", async (req, res) => {
   }
 });
 
-// Reschedule an appointment with ATOMIC PROTECTION
-// PATCH /api/appointments/:id/reschedule
+/**
+ * @openapi
+ * /api/appointments/{id}/reschedule:
+ *   patch:
+ *     summary: Reschedule an appointment with atomic protection
+ *     description: Atomically updates the date and time of an appointment, ensuring the new time slot is available and handling potential race conditions.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the appointment to reschedule.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               dateTime:
+ *                 type: string
+ *                 format: date-time
+ *                 description: The new date and time for the appointment (conflicts with date/time).
+ *               date:
+ *                 type: string
+ *                 format: date
+ *                 description: The new date for the appointment (requires time).
+ *               time:
+ *                 type: string
+ *                 description: The new time for the appointment (requires date).
+ *               businessId:
+ *                 type: string
+ *                 description: The ID of the business (required if changing business).
+ *     responses:
+ *       200:
+ *         description: Appointment rescheduled successfully.
+ *       400:
+ *         description: Invalid request body or validation error.
+ *       404:
+ *         description: Appointment not found.
+ *       409:
+ *         description: The new time slot is already booked.
+ *       500:
+ *         description: Internal server error.
+ */
 router.patch("/:id/reschedule", async (req, res) => {
   try {
     console.log('🔄 === ATOMIC APPOINTMENT RESCHEDULE REQUEST ===');
@@ -488,9 +713,39 @@ router.patch("/:id/reschedule", async (req, res) => {
   }
 });
 
-// Update an existing appointment
-// PUT /api/appointments/:id
-// Updates appointment details
+/**
+ * @openapi
+ * /api/appointments/{id}:
+ *   put:
+ *     summary: Update an existing appointment
+ *     description: Updates the details of an existing appointment.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the appointment to update.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Appointment'
+ *     responses:
+ *       200:
+ *         description: The updated appointment.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Appointment'
+ *       400:
+ *         description: Invalid request body.
+ *       404:
+ *         description: Appointment not found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.put("/:id", async (req, res) => {
   try {
     const updated = await Appointment.findByIdAndUpdate(
@@ -505,9 +760,27 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// Delete an appointment
-// DELETE /api/appointments/:id
-// Removes appointment from database
+/**
+ * @openapi
+ * /api/appointments/{id}:
+ *   delete:
+ *     summary: Delete an appointment
+ *     description: Permanently removes an appointment from the database.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the appointment to delete.
+ *     responses:
+ *       200:
+ *         description: Appointment deleted successfully.
+ *       404:
+ *         description: Appointment not found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.delete("/:id", async (req, res) => {
   try {
     const deleted = await Appointment.findByIdAndDelete(req.params.id);
@@ -518,8 +791,41 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-
-// GET /api/appointments/available-slots/:businessId?date=YYYY-MM-DD&serviceId=...
+/**
+ * @openapi
+ * /api/appointments/available-slots/{businessId}:
+ *   get:
+ *     summary: Get available appointment slots for a business
+ *     description: Retrieves a list of available time slots for a given business, date, and service duration.
+ *     parameters:
+ *       - in: path
+ *         name: businessId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the business.
+ *       - in: query
+ *         name: date
+ *         required: true
+ *         schema:
+ *           type: string
+ *           format: date
+ *         description: The date to check for available slots (YYYY-MM-DD).
+ *       - in: query
+ *         name: serviceId
+ *         schema:
+ *           type: string
+ *         description: The ID of the service to determine the appointment duration.
+ *     responses:
+ *       200:
+ *         description: A list of available slots.
+ *       400:
+ *         description: Date parameter is required.
+ *       404:
+ *         description: Business not found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/available-slots/:businessId", async (req, res) => {
   try {
     const { businessId } = req.params;
@@ -627,8 +933,25 @@ function minutesToTimeString(minutes) {
   return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
 }
 
-// Get customers for a specific business with business-specific data
-// GET /api/appointments/business/:businessId/customers
+/**
+ * @openapi
+ * /api/appointments/business/{businessId}/customers:
+ *   get:
+ *     summary: Get customers for a specific business
+ *     description: Retrieves a list of customers who have had appointments with a specific business, including appointment history and counts.
+ *     parameters:
+ *       - in: path
+ *         name: businessId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the business.
+ *     responses:
+ *       200:
+ *         description: A list of customers for the business.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/business/:businessId/customers", async (req, res) => {
   try {
     const { businessId } = req.params;
@@ -719,9 +1042,42 @@ router.get("/business/:businessId/customers", async (req, res) => {
   }
 });
 
-// Get appointments for a user by phone number
-// GET /api/appointments/user/:phone
-// Returns appointments organized by status (booked, completed, canceled)
+/**
+ * @openapi
+ * /api/appointments/user/{phone}:
+ *   get:
+ *     summary: Get appointments for a user by phone number
+ *     description: Retrieves a user's appointments, organized by status (booked, completed, canceled).
+ *     parameters:
+ *       - in: path
+ *         name: phone
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The phone number of the user.
+ *     responses:
+ *       200:
+ *         description: An object containing lists of appointments grouped by status.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 booked:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Appointment'
+ *                 completed:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Appointment'
+ *                 canceled:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Appointment'
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/user/:phone", async (req, res) => {
   try {
     const { phone } = req.params;

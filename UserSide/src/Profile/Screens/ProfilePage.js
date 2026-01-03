@@ -7,11 +7,11 @@ import {
   TouchableOpacity,
   ScrollView,
   Switch,
-  SafeAreaView,
   StatusBar,
   Alert,
   Platform
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { ScaledSheet } from 'react-native-size-matters';
 import Constants from 'expo-constants';
@@ -54,7 +54,7 @@ const ProfilePage = () => {
         // Upload to server; get relative URL; store full URL in context for instant UI update
         try {
           const uploaded = await uploadUserAvatar((user && (user.id || user._id)) || userData.id, uri);
-          const fullUrl = uploaded.profileUrl?.startsWith('http') ? uploaded.profileUrl : `http://10.0.0.109:3000${uploaded.profileUrl}`;
+          const fullUrl = uploaded.profileUrl?.startsWith('http') ? uploaded.profileUrl : `http://10.0.0.6:3000${uploaded.profileUrl}`;
           updateProfileImage(fullUrl);
         } catch (e) {
           // Fallback: still show locally selected image even if upload failed

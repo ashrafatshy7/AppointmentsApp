@@ -38,6 +38,7 @@
     "@babel/core": "^7.20.0",
     "@types/react": "19.1.13",
     "babel-preset-expo": "~54.0.0",
+    "baseline-browser-mapping": "^2.9.0",
     "typescript": "~5.9.2"
   },
   "private": true,

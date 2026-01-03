@@ -1,8 +1,8 @@
 // src/Dashboard/Service/ApiService.js
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const BASE_URL = 'http://10.0.0.109:3000/api'; // Update with your server URL
-const SERVER_URL = 'http://10.0.0.109:3000'; // Server base URL for images
+const BASE_URL = 'http://10.0.0.6:3000/api'; // Update with your server URL
+const SERVER_URL = 'http://10.0.0.6:3000'; // Server base URL for images
 
 class ApiService {
   constructor() {

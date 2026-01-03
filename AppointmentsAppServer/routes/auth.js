@@ -4,7 +4,43 @@ const OTP = require("../models/OTP");
 const User = require("../models/user");
 const Business = require("../models/business");
 
-// Check if user exists for login
+/**
+ * @openapi
+ * /api/auth/check-user-exists:
+ *   post:
+ *     summary: Check if a user exists
+ *     description: Checks if a user account (either client or business) exists for a given phone number.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - phone
+ *             properties:
+ *               phone:
+ *                 type: string
+ *                 description: The user's phone number.
+ *     responses:
+ *       200:
+ *         description: Returns whether the user exists.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 userExists:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *       400:
+ *         description: Phone number is required.
+ *       500:
+ *         description: Internal server error.
+ */
 router.post("/check-user-exists", async (req, res) => {
   try {
     const { phone } = req.body;
@@ -39,7 +75,32 @@ router.post("/check-user-exists", async (req, res) => {
   }
 });
 
-// Send OTP for client authentication
+/**
+ * @openapi
+ * /api/auth/send-otp-client:
+ *   post:
+ *     summary: Send OTP for client authentication
+ *     description: Sends a one-time password (OTP) to a client's phone number for verification.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - phone
+ *             properties:
+ *               phone:
+ *                 type: string
+ *                 description: The client's phone number.
+ *     responses:
+ *       200:
+ *         description: OTP sent successfully.
+ *       400:
+ *         description: Phone number is required.
+ *       500:
+ *         description: Internal server error.
+ */
 router.post("/send-otp-client", async (req, res) => {
   try {
     const { phone } = req.body;
@@ -72,7 +133,36 @@ router.post("/send-otp-client", async (req, res) => {
   }
 });
 
-// Verify OTP for client authentication
+/**
+ * @openapi
+ * /api/auth/verify-otp-client:
+ *   post:
+ *     summary: Verify OTP for client authentication
+ *     description: Verifies the OTP sent to a client's phone number. If successful, it logs in an existing user or signals that a new user needs to register.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - phone
+ *               - otp
+ *             properties:
+ *               phone:
+ *                 type: string
+ *                 description: The client's phone number.
+ *               otp:
+ *                 type: string
+ *                 description: The one-time password.
+ *     responses:
+ *       200:
+ *         description: OTP verification result.
+ *       400:
+ *         description: Invalid or expired OTP, or missing parameters.
+ *       500:
+ *         description: Internal server error.
+ */
 router.post("/verify-otp-client", async (req, res) => {
   try {
     const { phone, otp } = req.body;
@@ -124,7 +214,40 @@ router.post("/verify-otp-client", async (req, res) => {
   }
 });
 
-// Register new client user
+/**
+ * @openapi
+ * /api/auth/register-client:
+ *   post:
+ *     summary: Register a new client user
+ *     description: Creates a new client user account.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - phone
+ *               - name
+ *             properties:
+ *               phone:
+ *                 type: string
+ *                 description: The new user's phone number.
+ *               name:
+ *                 type: string
+ *                 description: The new user's name.
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 description: The new user's email address (optional).
+ *     responses:
+ *       200:
+ *         description: User registered successfully.
+ *       400:
+ *         description: Missing parameters or user already exists.
+ *       500:
+ *         description: Internal server error.
+ */
 router.post("/register-client", async (req, res) => {
   try {
     const { phone, name, email } = req.body;
@@ -172,7 +295,32 @@ router.post("/register-client", async (req, res) => {
   }
 });
 
-// Send OTP for business authentication (BusinessSide only)
+/**
+ * @openapi
+ * /api/auth/send-otp-business:
+ *   post:
+ *     summary: Send OTP for business authentication
+ *     description: Sends an OTP to a business owner's phone number for verification.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - phone
+ *             properties:
+ *               phone:
+ *                 type: string
+ *                 description: The business owner's phone number.
+ *     responses:
+ *       200:
+ *         description: OTP sent successfully.
+ *       400:
+ *         description: Phone number is required or no account found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.post("/send-otp-business", async (req, res) => {
   try {
     const { phone } = req.body;
@@ -215,7 +363,36 @@ router.post("/send-otp-business", async (req, res) => {
   }
 });
 
-// Verify OTP for business authentication (BusinessSide only)
+/**
+ * @openapi
+ * /api/auth/verify-otp-business:
+ *   post:
+ *     summary: Verify OTP for business authentication
+ *     description: Verifies the OTP for a business owner. If successful, logs the user in and returns their profile and business data.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - phone
+ *               - otp
+ *             properties:
+ *               phone:
+ *                 type: string
+ *                 description: The business owner's phone number.
+ *               otp:
+ *                 type: string
+ *                 description: The one-time password.
+ *     responses:
+ *       200:
+ *         description: OTP verification successful.
+ *       400:
+ *         description: Invalid or expired OTP, or missing parameters.
+ *       500:
+ *         description: Internal server error.
+ */
 router.post("/verify-otp-business", async (req, res) => {
   try {
     const { phone, otp } = req.body;
@@ -300,7 +477,24 @@ router.post("/verify-otp-business", async (req, res) => {
   }
 });
 
-// Get user profile
+/**
+ * @openapi
+ * /api/auth/profile:
+ *   get:
+ *     summary: Get user profile
+ *     description: Retrieves the profile of the currently authenticated user, including their associated business data.
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: The user's profile data.
+ *       401:
+ *         description: Unauthorized, no token provided or invalid token.
+ *       404:
+ *         description: User or business not found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/profile", async (req, res) => {
   try {
     const { authorization } = req.headers;
@@ -354,7 +548,34 @@ router.get("/profile", async (req, res) => {
   }
 });
 
-// Get Israeli cities dynamically from external API
+/**
+ * @openapi
+ * /api/auth/cities:
+ *   get:
+ *     summary: Get Israeli cities
+ *     description: Retrieves a list of Israeli cities, currently using a fallback list to avoid external API rate limiting.
+ *     responses:
+ *       200:
+ *         description: A list of Israeli cities.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 cities:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       english:
+ *                         type: string
+ *                       hebrew:
+ *                         type: string
+ *                 source:
+ *                   type: string
+ */
 router.get("/cities", async (req, res) => {
   try {
     // Temporarily disabled external API calls to avoid rate limiting
@@ -479,9 +700,56 @@ router.get("/cities", async (req, res) => {
   }
 });
 
-
-
-// Create business account
+/**
+ * @openapi
+ * /api/auth/create-business:
+ *   post:
+ *     summary: Create a business account
+ *     description: Creates a new business account and a corresponding business owner user.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - businessName
+ *               - ownerName
+ *               - ownerPhone
+ *               - businessPhone
+ *               - city
+ *               - street
+ *               - buildingNumber
+ *               - category
+ *             properties:
+ *               businessName:
+ *                 type: string
+ *               ownerName:
+ *                 type: string
+ *               ownerPhone:
+ *                 type: string
+ *               businessPhone:
+ *                 type: string
+ *               city:
+ *                 type: string
+ *               street:
+ *                 type: string
+ *               buildingNumber:
+ *                 type: string
+ *               category:
+ *                 type: string
+ *               coordinates:
+ *                 type: array
+ *                 items:
+ *                   type: number
+ *     responses:
+ *       200:
+ *         description: Business account created successfully.
+ *       400:
+ *         description: Missing required fields or business already exists.
+ *       500:
+ *         description: Internal server error.
+ */
 router.post("/create-business", async (req, res) => {
   try {
     const {

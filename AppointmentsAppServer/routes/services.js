@@ -36,9 +36,24 @@ const authenticateAndGetBusiness = async (req, res, next) => {
   }
 };
 
-// Create a new service
-// POST /api/services/create
-// Creates a new service for a business
+/**
+ * @openapi
+ * /api/services/create:
+ *   post:
+ *     summary: Create a new service
+ *     description: Creates a new service for a business.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Service'
+ *     responses:
+ *       201:
+ *         description: Service created successfully.
+ *       400:
+ *         description: Invalid request body.
+ */
 router.post("/create", async (req, res) => {
   try {
     const service = new Service(req.body);
@@ -49,9 +64,25 @@ router.post("/create", async (req, res) => {
   }
 });
 
-// Get all services for a specific business
-// GET /api/services/business/:businessId
-// Returns all services offered by a business
+/**
+ * @openapi
+ * /api/services/business/{businessId}:
+ *   get:
+ *     summary: Get all services for a specific business
+ *     description: Retrieves all services offered by a specific business.
+ *     parameters:
+ *       - in: path
+ *         name: businessId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the business.
+ *     responses:
+ *       200:
+ *         description: A list of services.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/business/:businessId", async (req, res) => {
   try {
     const services = await Service.find({ business: req.params.businessId });
@@ -62,7 +93,7 @@ router.get("/business/:businessId", async (req, res) => {
       
       // Construct full image URL if image exists
       if (transformedService.image) {
-        transformedService.image = `http://10.0.0.109:3000${transformedService.image}`;
+        transformedService.image = `http://10.0.0.6:3000${transformedService.image}`;
       }
       
       return transformedService;
@@ -74,9 +105,27 @@ router.get("/business/:businessId", async (req, res) => {
   }
 });
 
-// Get a single service by ID
-// GET /api/services/:id
-// Returns service details
+/**
+ * @openapi
+ * /api/services/{id}:
+ *   get:
+ *     summary: Get a single service by ID
+ *     description: Retrieves the details of a single service by its ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the service.
+ *     responses:
+ *       200:
+ *         description: The requested service.
+ *       404:
+ *         description: Service not found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.get("/:id", async (req, res) => {
   try {
     const service = await Service.findById(req.params.id);
@@ -87,9 +136,39 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-// Update a service
-// PUT /api/services/:id
-// Updates service information (with authorization check)
+/**
+ * @openapi
+ * /api/services/{id}:
+ *   put:
+ *     summary: Update a service
+ *     description: Updates the details of a specific service. Requires authentication.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the service to update.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Service'
+ *     responses:
+ *       200:
+ *         description: The updated service.
+ *       400:
+ *         description: Invalid request body.
+ *       401:
+ *         description: Unauthorized, token is invalid or missing.
+ *       403:
+ *         description: Forbidden, user cannot modify this service.
+ *       404:
+ *         description: Service not found.
+ */
 router.put("/:id", authenticateAndGetBusiness, async (req, res) => {
   try {
     // First check if service exists and get its business ID
@@ -119,9 +198,33 @@ router.put("/:id", authenticateAndGetBusiness, async (req, res) => {
   }
 });
 
-// Delete a service
-// DELETE /api/services/:id
-// Removes service from database (with authorization check)
+/**
+ * @openapi
+ * /api/services/{id}:
+ *   delete:
+ *     summary: Delete a service
+ *     description: Deletes a specific service. Requires authentication.
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the service to delete.
+ *     responses:
+ *       200:
+ *         description: Service deleted successfully.
+ *       401:
+ *         description: Unauthorized, token is invalid or missing.
+ *       403:
+ *         description: Forbidden, user cannot delete this service.
+ *       404:
+ *         description: Service not found.
+ *       500:
+ *         description: Internal server error.
+ */
 router.delete("/:id", authenticateAndGetBusiness, async (req, res) => {
   try {
     // First check if service exists and get its business ID

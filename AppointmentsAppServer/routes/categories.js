@@ -2,7 +2,29 @@ const express = require('express');
 const router = express.Router();
 const Category = require('../models/category');
 
-// Get all categories
+/**
+ * @openapi
+ * /api/categories:
+ *   get:
+ *     summary: Get all categories
+ *     description: Retrieves a list of all categories, sorted by order and name.
+ *     responses:
+ *       200:
+ *         description: A list of categories.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Category'
+ *       500:
+ *         description: Failed to fetch categories.
+ */
 router.get('/', async (req, res) => {
   try {
     const categories = await Category.find({})
@@ -22,7 +44,36 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get category by ID
+/**
+ * @openapi
+ * /api/categories/{id}:
+ *   get:
+ *     summary: Get a category by ID
+ *     description: Retrieves a single category by its unique ID.
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the category to retrieve.
+ *     responses:
+ *       200:
+ *         description: The requested category.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 data:
+ *                   $ref: '#/components/schemas/Category'
+ *       404:
+ *         description: Category not found.
+ *       500:
+ *         description: Failed to fetch category.
+ */
 router.get('/:id', async (req, res) => {
   try {
     const category = await Category.findById(req.params.id);
@@ -47,7 +98,38 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Create new category (Admin only)
+/**
+ * @openapi
+ * /api/categories:
+ *   post:
+ *     summary: Create a new category
+ *     description: Creates a new category (Admin only).
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - icon
+ *             properties:
+ *               name:
+ *                 type: string
+ *               icon:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               order:
+ *                 type: number
+ *     responses:
+ *       201:
+ *         description: Category created successfully.
+ *       400:
+ *         description: Missing required fields or category already exists.
+ *       500:
+ *         description: Failed to create category.
+ */
 router.post('/', async (req, res) => {
   try {
     const { name, icon, description, order } = req.body;
@@ -88,7 +170,46 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Update category (Admin only)
+/**
+ * @openapi
+ * /api/categories/{id}:
+ *   put:
+ *     summary: Update a category
+ *     description: Updates an existing category (Admin only).
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the category to update.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               icon:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               isActive:
+ *                 type: boolean
+ *               order:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Category updated successfully.
+ *       400:
+ *         description: Category with this name already exists.
+ *       404:
+ *         description: Category not found.
+ *       500:
+ *         description: Failed to update category.
+ */
 router.put('/:id', async (req, res) => {
   try {
     const { name, icon, description, isActive, order } = req.body;
@@ -126,7 +247,27 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// Delete category (Admin only)
+/**
+ * @openapi
+ * /api/categories/{id}:
+ *   delete:
+ *     summary: Delete a category
+ *     description: Deletes a category by its ID (Admin only).
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the category to delete.
+ *     responses:
+ *       200:
+ *         description: Category deleted successfully.
+ *       404:
+ *         description: Category not found.
+ *       500:
+ *         description: Failed to delete category.
+ */
 router.delete('/:id', async (req, res) => {
   try {
     const category = await Category.findByIdAndDelete(req.params.id);

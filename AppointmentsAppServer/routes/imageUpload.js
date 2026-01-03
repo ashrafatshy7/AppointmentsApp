@@ -51,12 +51,36 @@ const businessLogoUpload = multer({
   }
 });
 
-
-
-// Handle business profile logo upload
-// POST /api/image-upload/business-logo
-// Expects: multipart/form-data with 'logo' field containing the file and 'businessId' in body
-// Returns: JSON with the business logo URL and updates the business in MongoDB
+/**
+ * @openapi
+ * /api/image-upload/business-logo:
+ *   post:
+ *     summary: Upload a business logo
+ *     description: Uploads a profile logo for a business. Expects multipart/form-data.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               logo:
+ *                 type: string
+ *                 format: binary
+ *                 description: The logo file to upload.
+ *               businessId:
+ *                 type: string
+ *                 description: The ID of the business.
+ *     responses:
+ *       201:
+ *         description: Logo uploaded successfully.
+ *       400:
+ *         description: No file uploaded or business ID is missing.
+ *       404:
+ *         description: Business not found.
+ *       500:
+ *         description: Failed to upload logo.
+ */
 router.post("/business-logo", businessLogoUpload.single("logo"), async (req, res) => {
   console.log("🚀🚀🚀 BUSINESS LOGO UPLOAD ROUTE HIT - UPDATED VERSION 🚀🚀🚀");
   console.log("aaaaaaaaaaa");
@@ -135,10 +159,36 @@ router.post("/business-logo", businessLogoUpload.single("logo"), async (req, res
   }
 });
 
-// Handle business cover photo upload
-// POST /api/image-upload/business-cover
-// Expects: multipart/form-data with 'cover' field containing the file and 'businessId' in body
-// Returns: JSON with the business cover photo URL and updates the business in MongoDB
+/**
+ * @openapi
+ * /api/image-upload/business-cover:
+ *   post:
+ *     summary: Upload a business cover photo
+ *     description: Uploads a cover photo for a business. Expects multipart/form-data.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               cover:
+ *                 type: string
+ *                 format: binary
+ *                 description: The cover photo file to upload.
+ *               businessId:
+ *                 type: string
+ *                 description: The ID of the business.
+ *     responses:
+ *       201:
+ *         description: Cover photo uploaded successfully.
+ *       400:
+ *         description: No file uploaded or business ID is missing.
+ *       404:
+ *         description: Business not found.
+ *       500:
+ *         description: Failed to upload cover photo.
+ */
 router.post("/business-cover", businessLogoUpload.single("cover"), async (req, res) => {
   try {
     if (!req.file) {
@@ -195,9 +245,36 @@ router.post("/business-cover", businessLogoUpload.single("cover"), async (req, r
   }
 });
 
-// Handle user profile avatar upload
-// POST /api/image-upload/user-profile
-// Expects: multipart/form-data with 'avatar' file and 'userId' in body
+/**
+ * @openapi
+ * /api/image-upload/user-profile:
+ *   post:
+ *     summary: Upload a user profile avatar
+ *     description: Uploads a profile avatar for a user. Expects multipart/form-data.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               avatar:
+ *                 type: string
+ *                 format: binary
+ *                 description: The avatar file to upload.
+ *               userId:
+ *                 type: string
+ *                 description: The ID of the user.
+ *     responses:
+ *       201:
+ *         description: Avatar uploaded successfully.
+ *       400:
+ *         description: No file uploaded or user ID is missing.
+ *       404:
+ *         description: User not found.
+ *       500:
+ *         description: Failed to upload avatar.
+ */
 router.post("/user-profile", businessLogoUpload.single("avatar"), async (req, res) => {
   try {
     if (!req.file) {
@@ -239,10 +316,36 @@ router.post("/user-profile", businessLogoUpload.single("avatar"), async (req, re
   }
 });
 
-// Handle gallery image upload
-// POST /api/image-upload/gallery-image
-// Expects: multipart/form-data with 'image' field containing the file and 'businessId' in body
-// Returns: JSON with the gallery image URL and updates the business gallery in MongoDB
+/**
+ * @openapi
+ * /api/image-upload/gallery-image:
+ *   post:
+ *     summary: Upload a gallery image for a business
+ *     description: Uploads an image to a business's gallery. Expects multipart/form-data.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               image:
+ *                 type: string
+ *                 format: binary
+ *                 description: The gallery image file to upload.
+ *               businessId:
+ *                 type: string
+ *                 description: The ID of the business.
+ *     responses:
+ *       201:
+ *         description: Gallery image uploaded successfully.
+ *       400:
+ *         description: No file uploaded or business ID is missing.
+ *       404:
+ *         description: Business not found.
+ *       500:
+ *         description: Failed to upload gallery image.
+ */
 router.post("/gallery-image", businessLogoUpload.single("image"), async (req, res) => {
   try {
     if (!req.file) {
@@ -306,10 +409,38 @@ router.post("/gallery-image", businessLogoUpload.single("image"), async (req, re
   }
 });
 
-// Handle gallery image deletion
-// DELETE /api/image-upload/gallery-image
-// Expects: JSON with 'businessId' and 'imageUrl' in body
-// Returns: JSON confirmation and updates the business gallery in MongoDB
+/**
+ * @openapi
+ * /api/image-upload/gallery-image:
+ *   delete:
+ *     summary: Delete a gallery image
+ *     description: Deletes an image from a business's gallery.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - businessId
+ *               - imageUrl
+ *             properties:
+ *               businessId:
+ *                 type: string
+ *                 description: The ID of the business.
+ *               imageUrl:
+ *                 type: string
+ *                 description: The URL of the image to delete.
+ *     responses:
+ *       200:
+ *         description: Gallery image deleted successfully.
+ *       400:
+ *         description: Missing business ID or image URL.
+ *       404:
+ *         description: Business not found.
+ *       500:
+ *         description: Failed to delete gallery image.
+ */
 router.delete("/gallery-image", async (req, res) => {
   try {
     const { businessId, imageUrl } = req.body;
@@ -356,10 +487,44 @@ router.delete("/gallery-image", async (req, res) => {
   }
 });
 
-// Handle gallery reordering
-// PUT /api/image-upload/gallery-reorder
-// Expects: JSON with 'businessId' and 'gallery' array in body
-// Returns: JSON confirmation and updates the business gallery order in MongoDB
+/**
+ * @openapi
+ * /api/image-upload/gallery-reorder:
+ *   put:
+ *     summary: Reorder gallery images
+ *     description: Updates the order of images in a business's gallery.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - businessId
+ *               - gallery
+ *             properties:
+ *               businessId:
+ *                 type: string
+ *                 description: The ID of the business.
+ *               gallery:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   properties:
+ *                     path:
+ *                       type: string
+ *                     order:
+ *                       type: number
+ *     responses:
+ *       200:
+ *         description: Gallery order updated successfully.
+ *       400:
+ *         description: Missing business ID or gallery array.
+ *       404:
+ *         description: Business not found.
+ *       500:
+ *         description: Failed to reorder gallery.
+ */
 router.put("/gallery-reorder", async (req, res) => {
   try {
     const { businessId, gallery } = req.body;

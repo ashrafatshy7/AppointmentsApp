@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Base URL for the server - adjust this to match your server configuration
 // For React Native, use the machine's IP address, not localhost
-const API_BASE_URL = 'http://10.0.0.109:3000/api';
+const API_BASE_URL = 'http://10.0.0.6:3000/api';
 
 // Create axios instance with default config
 const api = axios.create({
